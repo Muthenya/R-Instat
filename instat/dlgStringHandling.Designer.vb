@@ -84,6 +84,7 @@ Partial Class dlgStringHandling
         Me.ucrSelectorStringHandling = New instat.ucrSelectorByDataFrameAddRemove()
         Me.ucrBase = New instat.ucrButtons()
         Me.ucrPnlStringHandling = New instat.UcrPanel()
+        Me.ucrReceiverMultipleReplace = New instat.ucrReceiverMultiple()
         Me.grpRegex.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -412,6 +413,15 @@ Partial Class dlgStringHandling
         resources.ApplyResources(Me.ucrPnlStringHandling, "ucrPnlStringHandling")
         Me.ucrPnlStringHandling.Name = "ucrPnlStringHandling"
         '
+        'ucrReceiverMultipleReplace
+        '
+        Me.ucrReceiverMultipleReplace.frmParent = Me
+        resources.ApplyResources(Me.ucrReceiverMultipleReplace, "ucrReceiverMultipleReplace")
+        Me.ucrReceiverMultipleReplace.Name = "ucrReceiverMultipleReplace"
+        Me.ucrReceiverMultipleReplace.Selector = Nothing
+        Me.ucrReceiverMultipleReplace.strNcFilePath = ""
+        Me.ucrReceiverMultipleReplace.ucrSelector = Nothing
+        '
         'dlgStringHandling
         '
         resources.ApplyResources(Me, "$this")
@@ -438,6 +448,7 @@ Partial Class dlgStringHandling
         Me.Controls.Add(Me.ucrSelectorStringHandling)
         Me.Controls.Add(Me.ucrBase)
         Me.Controls.Add(Me.ucrPnlStringHandling)
+        Me.Controls.Add(Me.ucrReceiverMultipleReplace)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
         Me.MaximizeBox = False
         Me.MinimizeBox = False
@@ -493,4 +504,5 @@ Partial Class dlgStringHandling
     Friend WithEvents rdoFixed As RadioButton
     Friend WithEvents ucrPnlFixedRegex As UcrPanel
     Friend WithEvents ucrSaveStringHandling As ucrSave
+    Friend WithEvents ucrReceiverMultipleReplace As ucrReceiverMultiple
 End Class

@@ -46,6 +46,11 @@ Public Class dlgStringHandling
         ucrReceiverStringHandling.bUseFilteredData = False
         ucrReceiverStringHandling.SetMeAsReceiver()
 
+        ucrReceiverMultipleReplace.SetParameter(New RParameter("string", 0))
+        ucrReceiverMultipleReplace.SetParameterIsRFunction()
+        ucrReceiverMultipleReplace.Selector = ucrSelectorStringHandling
+        ucrReceiverMultipleReplace.bUseFilteredData = False
+
         'ucrRdoOptions
         ucrPnlStringHandling.AddRadioButton(rdoCount)
         ucrPnlStringHandling.AddRadioButton(rdoExtract)
@@ -73,6 +78,9 @@ Public Class dlgStringHandling
         ucrInputReplaceBy.SetLinkedDisplayControl(lblReplaceBy)
         ucrChkIncludeRegularExpressions.AddToLinkedControls(ucrPnlFixedRegex, {True}, bNewLinkedAddRemoveParameter:=True, bNewLinkedHideIfParameterMissing:=True, objNewDefaultState:=rdoFixed)
         ucrPnlFixedRegex.AddToLinkedControls(ucrReceiverForRegexExpression, {rdoRegex}, bNewLinkedAddRemoveParameter:=True, bNewLinkedHideIfParameterMissing:=True)
+
+        ucrPnlStringHandling.AddToLinkedControls(ucrReceiverMultipleReplace, {rdoReplace, rdoReplaceAll}, bNewLinkedAddRemoveParameter:=True, bNewLinkedHideIfParameterMissing:=True)
+        ucrPnlStringHandling.AddToLinkedControls(ucrReceiverStringHandling, {rdoCount, rdoDetect, rdoExtract, rdoLocate}, bNewLinkedAddRemoveParameter:=True, bNewLinkedHideIfParameterMissing:=True)
 
         'ucrSave
         ucrSaveStringHandling.SetPrefix("count")
@@ -171,8 +179,7 @@ Public Class dlgStringHandling
         ucrReceiverStringHandling.AddAdditionalCodeParameterPair(clsDetectFunction, New RParameter("string", 0), iAdditionalPairNo:=1)
         ucrReceiverStringHandling.AddAdditionalCodeParameterPair(clsExtractFunction, New RParameter("string", 0), iAdditionalPairNo:=2)
         ucrReceiverStringHandling.AddAdditionalCodeParameterPair(clsLocateFunction, New RParameter("string", 0), iAdditionalPairNo:=3)
-        ucrReceiverStringHandling.AddAdditionalCodeParameterPair(clsReplaceFunction, New RParameter("string", 0), iAdditionalPairNo:=4)
-        ucrReceiverStringHandling.AddAdditionalCodeParameterPair(clsReplaceAllFunction, New RParameter("string", 0), iAdditionalPairNo:=5)
+        ucrReceiverMultipleReplace.AddAdditionalCodeParameterPair(clsReplaceAllFunction, New RParameter("string", 0), iAdditionalPairNo:=1)
 
         ucrInputPattern.AddAdditionalCodeParameterPair(clsDetectFunction, New RParameter("pattern", 1), iAdditionalPairNo:=1)
         ucrInputPattern.AddAdditionalCodeParameterPair(clsExtractFunction, New RParameter("pattern", 1), iAdditionalPairNo:=2)
@@ -190,6 +197,7 @@ Public Class dlgStringHandling
         ucrSaveStringHandling.AddAdditionalRCode(clsReplaceAllFunction, iAdditionalPairNo:=5)
 
         ucrReceiverStringHandling.SetRCode(clsCountFunction, bReset)
+        ucrReceiverMultipleReplace.SetRCode(clsReplaceFunction, bReset)
         ucrInputPattern.SetRCode(clsCountFunction, bReset)
         ucrInputReplaceBy.SetRCode(clsReplaceAllFunction, bReset)
         'ucrPnlStringHandling.SetRCode(clsCountFunction, bReset)
