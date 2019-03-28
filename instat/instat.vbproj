@@ -5751,19 +5751,7 @@
     <Content Include="static\Library\Climatic\Guinea\koundara.xlsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="static\Library\Climatic\Kenya\western_kenya_rain.csv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="static\Library\Climatic\Kenya\western_kenya_station_info.xlsx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="static\Library\Climatic\Nigeria\samaru_56.RDS">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="static\Library\Climatic\rain_galle.xlsx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="static\Library\Climatic\Tanzania\dodoma.RDS">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="static\Library\Climatic\_Satellite\CMSAF_CFC_DailyMean_1991-2015_Dodoma.nc">
@@ -5865,6 +5853,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="obj\" />
+    <Folder Include="static\Library\Climatic\Kenya\" />
+    <Folder Include="static\Library\Climatic\Nigeria\" />
+    <Folder Include="static\Library\Climatic\Tanzania\" />
     <Folder Include="static\Library\Options by Context\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
