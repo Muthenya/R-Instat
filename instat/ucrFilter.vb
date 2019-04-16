@@ -107,12 +107,12 @@ Public Class ucrFilter
                 cmdToggleSelectAll.Visible = True
                 'ucrValueForFilter.Visible = False
                 'ucrFilterOperation.Visible = False
-                ' ucrFilterDateTimePicker.Visible = False
+                ucrFilterDateTimePicker.Visible = False
             ElseIf ucrFilterByReceiver.strCurrDataType.Contains("logical") Then
                 lblSelectLevels.Visible = False
                 ucrFactorLevels.Visible = False
                 cmdToggleSelectAll.Visible = False
-                'ucrValueForFilter.Visible = True
+                ucrValueForFilter.Visible = True
                 ucrFilterOperation.Visible = True
                 ucrFilterOperation.SetItems({"==", "!="})
                 ucrValueForFilter.SetItems({"TRUE", "FALSE", "NA"})
@@ -121,24 +121,64 @@ Public Class ucrFilter
                 lblSelectLevels.Visible = False
                 ucrFactorLevels.Visible = False
                 cmdToggleSelectAll.Visible = False
-                'ucrValueForFilter.Visible = False
+                ucrValueForFilter.Visible = False
                 ucrFilterOperation.Visible = True
                 ucrFilterOperation.SetItems({"==", "<", "<=", ">", ">=", "!=", "==NA", "!=NA"})
-                'ucrFilterDateTimePicker.Visible = True
+                If ucrFilterOperation.GetText = "==NA" OrElse ucrFilterOperation.GetText = "!=NA" Then
+                    ucrFilterDateTimePicker.Visible = False
+                Else
+                    ucrFilterDateTimePicker.Visible = True
+                End If
             Else
-                lblSelectLevels.Visible = False
+                    lblSelectLevels.Visible = False
                 ucrFactorLevels.Visible = False
                 cmdToggleSelectAll.Visible = False
-                'ucrValueForFilter.Visible = True
                 ucrFilterOperation.Visible = True
                 ucrFilterOperation.SetItems({"==", "<", "<=", ">", ">=", "!=", "==NA", "!=NA"})
-                'ucrValueForFilter.SetItems({""})
-                'ucrFilterDateTimePicker.Visible = False
+                If ucrFilterOperation.GetText = "==NA" OrElse ucrFilterOperation.GetText = "!NA" Then
+                    ucrValueForFilter.Visible = False
+                Else
+                    ucrValueForFilter.Visible = True
+                    ucrValueForFilter.SetItems({""})
+                End If
+                ucrFilterDateTimePicker.Visible = False
             End If
         End If
-        DataTypes()
+        'DataTypes()
         SetToggleButtonSettings()
         CheckAddEnabled()
+    End Sub
+
+    Private Sub Datatypes2()
+        If ucrFilterByReceiver.strCurrDataType.Contains("factor") Then
+
+            ucrValueForFilter.Visible = False
+            ucrFilterOperation.Visible = False
+            ucrFilterDateTimePicker.Visible = False
+        ElseIf ucrFilterByReceiver.strCurrDataType.Contains("logical") Then
+            ucrValueForFilter.Visible = True
+            ucrFilterOperation.Visible = True
+            ucrFilterOperation.SetItems({"==", "!="})
+            ucrValueForFilter.SetItems({"TRUE", "FALSE", "NA"})
+            ucrFilterDateTimePicker.Visible = False
+        ElseIf ucrFilterByReceiver.strCurrDataType.Contains("Date") Then
+            ucrValueForFilter.Visible = False
+            ucrFilterOperation.Visible = True
+            If ucrFilterOperation.GetText = "==NA" OrElse ucrFilterOperation.GetText = "!=NA" Then
+                ucrFilterDateTimePicker.Visible = False
+            Else
+                ucrFilterDateTimePicker.Visible = True
+            End If
+        Else
+            ucrFilterOperation.Visible = True
+            If ucrFilterOperation.GetText = "==NA" OrElse ucrFilterOperation.GetText = "!NA" Then
+                ucrValueForFilter.Visible = False
+            Else
+                ucrValueForFilter.Visible = True
+                ucrValueForFilter.SetItems({""})
+            End If
+            ucrFilterDateTimePicker.Visible = False
+        End If
     End Sub
 
     Private Sub DataTypes()
@@ -155,6 +195,13 @@ Public Class ucrFilter
                         ucrValueForFilter.Visible = False
                         ucrFilterDateTimePicker.Visible = True
                     ElseIf ucrFilterByReceiver.strCurrDataType.Contains("logical") Then
+                        ucrValueForFilter.Visible = True
+                        ucrFilterDateTimePicker.Visible = False
+                    ElseIf ucrFilterByReceiver.strCurrDataType.Contains("factor") Then
+                        ucrValueForFilter.Visible = False
+                        ucrFilterDateTimePicker.Visible = False
+                        ucrFilterOperation.Visible = False
+                    Else
                         ucrValueForFilter.Visible = True
                         ucrFilterDateTimePicker.Visible = False
                     End If
@@ -310,6 +357,6 @@ Public Class ucrFilter
     End Sub
 
     Private Sub ucrFilterOperation_ControlContentsChanged(ucrChangedControl As ucrCore) Handles ucrFilterOperation.ControlContentsChanged
-        DataTypes()
+        'VariableTypeProperties()
     End Sub
 End Class
