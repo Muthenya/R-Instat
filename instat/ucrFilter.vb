@@ -14,6 +14,8 @@
 ' You should have received a copy of the GNU General Public License 
 ' along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+Imports instat
+
 Public Class ucrFilter
     Public bFirstLoad As Boolean
     Public clsFilterView As ROperator
@@ -59,7 +61,9 @@ Public Class ucrFilter
     Private Sub InitialiseControl()
         ucrFilterPreview.txtInput.ReadOnly = True
         ucrFilterByReceiver.Selector = ucrSelectorForFitler
-        ucrFilterOperation.SetItems({"==", "<", "<=", ">", ">=", "!="})
+        ucrFilterOperation.SetItems({"==", "<", "<=", ">", ">=", "!=", "==NA", "!=NA"})
+        ucrValueForFilter.SetItems({""})
+        ucrValueForFilter.SetDropDownStyleAsEditable(True)
         ucrFilterOperation.SetDropDownStyleAsNonEditable()
         ucrFactorLevels.SetAsMultipleSelector()
         ucrFactorLevels.SetReceiver(ucrFilterByReceiver)
@@ -76,9 +80,9 @@ Public Class ucrFilter
     End Sub
 
     Private Sub SetDefaults()
-        ucrFilterOperation.SetName("==")
         ucrFilterByReceiver.SetMeAsReceiver()
         VariableTypeProperties()
+        ucrFilterOperation.SetName("==")
     End Sub
 
     Private Sub ucrFilterVariable_SelectionChanged(sender As Object, e As EventArgs) Handles ucrFilterByReceiver.SelectionChanged
@@ -86,23 +90,81 @@ Public Class ucrFilter
     End Sub
 
     Private Sub VariableTypeProperties()
-        Dim bIsFactor As Boolean
+
         If ucrFilterByReceiver.IsEmpty() Then
             ucrValueForFilter.Visible = False
             lblSelectLevels.Visible = False
             ucrFactorLevels.Visible = False
             cmdToggleSelectAll.Visible = False
             ucrFilterOperation.Visible = False
-        Else
-            bIsFactor = ucrFilterByReceiver.strCurrDataType.Contains("factor")
-            lblSelectLevels.Visible = bIsFactor
-            ucrFactorLevels.Visible = bIsFactor
-            cmdToggleSelectAll.Visible = bIsFactor
-            ucrValueForFilter.Visible = Not bIsFactor
-            ucrFilterOperation.Visible = Not bIsFactor
+            ucrFilterDateTimePicker.Visible = False
+
+        ElseIf Not ucrFilterByReceiver.IsEmpty Then
+
+            If ucrFilterByReceiver.strCurrDataType.Contains("factor") Then
+                lblSelectLevels.Visible = True
+                ucrFactorLevels.Visible = True
+                cmdToggleSelectAll.Visible = True
+                'ucrValueForFilter.Visible = False
+                'ucrFilterOperation.Visible = False
+                ' ucrFilterDateTimePicker.Visible = False
+            ElseIf ucrFilterByReceiver.strCurrDataType.Contains("logical") Then
+                lblSelectLevels.Visible = False
+                ucrFactorLevels.Visible = False
+                cmdToggleSelectAll.Visible = False
+                'ucrValueForFilter.Visible = True
+                ucrFilterOperation.Visible = True
+                ucrFilterOperation.SetItems({"==", "!="})
+                ucrValueForFilter.SetItems({"TRUE", "FALSE", "NA"})
+                ucrFilterDateTimePicker.Visible = False
+            ElseIf ucrFilterByReceiver.strCurrDataType.Contains("Date") Then
+                lblSelectLevels.Visible = False
+                ucrFactorLevels.Visible = False
+                cmdToggleSelectAll.Visible = False
+                'ucrValueForFilter.Visible = False
+                ucrFilterOperation.Visible = True
+                ucrFilterOperation.SetItems({"==", "<", "<=", ">", ">=", "!=", "==NA", "!=NA"})
+                'ucrFilterDateTimePicker.Visible = True
+            Else
+                lblSelectLevels.Visible = False
+                ucrFactorLevels.Visible = False
+                cmdToggleSelectAll.Visible = False
+                'ucrValueForFilter.Visible = True
+                ucrFilterOperation.Visible = True
+                ucrFilterOperation.SetItems({"==", "<", "<=", ">", ">=", "!=", "==NA", "!=NA"})
+                'ucrValueForFilter.SetItems({""})
+                'ucrFilterDateTimePicker.Visible = False
+            End If
         End If
+        DataTypes()
         SetToggleButtonSettings()
         CheckAddEnabled()
+    End Sub
+
+    Private Sub DataTypes()
+        If ucrFilterOperation.Visible Then
+            Select Case ucrFilterOperation.GetText
+                Case "==NA"
+                    ucrValueForFilter.Visible = False
+                    ucrFilterDateTimePicker.Visible = False
+                Case "!=NA"
+                    ucrValueForFilter.Visible = False
+                    ucrFilterDateTimePicker.Visible = False
+                Case Else
+                    If ucrFilterByReceiver.strCurrDataType.Contains("Date") Then
+                        ucrValueForFilter.Visible = False
+                        ucrFilterDateTimePicker.Visible = True
+                    ElseIf ucrFilterByReceiver.strCurrDataType.Contains("logical") Then
+                        ucrValueForFilter.Visible = True
+                        ucrFilterDateTimePicker.Visible = False
+                    End If
+            End Select
+        Else
+            ucrValueForFilter.Visible = False
+            ucrFilterDateTimePicker.Visible = False
+
+        End If
+
     End Sub
 
     Private Sub CheckAddEnabled()
@@ -110,6 +172,8 @@ Public Class ucrFilter
             If ucrFilterByReceiver.strCurrDataType.Contains("factor") AndAlso ucrFactorLevels.GetSelectedLevels() <> "" Then
                 cmdAddCondition.Enabled = True
             ElseIf (Not ucrFilterOperation.IsEmpty) AndAlso (Not ucrValueForFilter.IsEmpty) Then
+                cmdAddCondition.Enabled = True
+            ElseIf (Not ucrFilterOperation.IsEmpty) AndAlso ucrFilterDateTimePicker.Visible = True Then
                 cmdAddCondition.Enabled = True
             Else
                 cmdAddCondition.Enabled = False
@@ -137,6 +201,9 @@ Public Class ucrFilter
             clsCurrentConditionList.AddParameter("operation", Chr(34) & ucrFilterOperation.GetText() & Chr(34))
             If ucrFilterByReceiver.strCurrDataType = "character" AndAlso ucrValueForFilter.GetText() <> "NA" Then
                 strCondition = Chr(34) & ucrValueForFilter.GetText() & Chr(34)
+            ElseIf ucrFilterByReceiver.strCurrDataType = "Date" Then
+                'TODO; this might need to be done in the control i.e ucrDateTimePicker
+                strCondition = Chr(34) & ucrFilterDateTimePicker.dtpDateTime.Value.Year & "/" & ucrFilterDateTimePicker.dtpDateTime.Value.Month & "/" & ucrFilterDateTimePicker.dtpDateTime.Value.Day & Chr(34)
             Else
                 strCondition = ucrValueForFilter.GetText()
             End If
@@ -177,7 +244,7 @@ Public Class ucrFilter
         CheckAddEnabled()
     End Sub
 
-    Private Sub ucrValueForFilter_NameChanged() Handles ucrValueForFilter.NameChanged
+    Private Sub ucrValueForFilter_NameChanged()
         CheckAddEnabled()
     End Sub
 
@@ -217,7 +284,7 @@ Public Class ucrFilter
         End If
     End Sub
 
-    Private Sub ucrValueForFilter_ContentsChanged() Handles ucrValueForFilter.ContentsChanged
+    Private Sub ucrValueForFilter_ContentsChanged() Handles ucrValueForFilter.ControlContentsChanged
         CheckAddEnabled()
     End Sub
 
@@ -240,5 +307,9 @@ Public Class ucrFilter
 
     Public Sub SetDefaultDataFrame(strDataFrame As String)
         strDefaultDataFrame = strDataFrame
+    End Sub
+
+    Private Sub ucrFilterOperation_ControlContentsChanged(ucrChangedControl As ucrCore) Handles ucrFilterOperation.ControlContentsChanged
+        DataTypes()
     End Sub
 End Class
