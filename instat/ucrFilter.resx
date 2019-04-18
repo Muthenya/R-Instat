@@ -411,10 +411,10 @@
     <value>7</value>
   </data>
   <data name="ucrFilterOperation.Location" type="System.Drawing.Point, System.Drawing">
-    <value>420, 40</value>
+    <value>416, 40</value>
   </data>
   <data name="ucrFilterOperation.Size" type="System.Drawing.Size, System.Drawing">
-    <value>44, 21</value>
+    <value>56, 21</value>
   </data>
   <data name="ucrFilterOperation.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
