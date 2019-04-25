@@ -80,9 +80,9 @@ Public Class ucrFilter
     End Sub
 
     Private Sub SetDefaults()
+        ucrFilterOperation.SetName("==")
         ucrFilterByReceiver.SetMeAsReceiver()
         VariableTypeProperties()
-        ucrFilterOperation.SetName("==")
     End Sub
 
     Private Sub ucrFilterVariable_SelectionChanged(sender As Object, e As EventArgs) Handles ucrFilterByReceiver.SelectionChanged
