@@ -213,20 +213,10 @@ Public Class ucrFilter
                 ElseIf ucrValueForFilter.Visible Then
                     strCondition = ucrValueForFilter.GetText()
                 End If
-                'clsCurrentConditionList.AddParameter("operation", Chr(34) & ucrFilterOperation.GetText() & Chr(34))
-                'If ucrFilterByReceiver.strCurrDataType = "character" AndAlso ucrValueForFilter.GetText() <> "NA" Then
-                '        strCondition = Chr(34) & ucrValueForFilter.GetText() & Chr(34)
-                '    ElseIf ucrFilterByReceiver.strCurrDataType = "Date" Then
-                '        'TODO; this might need to be done in the control i.e ucrDateTimePicker
-                '        strCondition = Chr(34) & ucrFilterDateTimePicker.dtpDateTime.Value.Year & "/" & ucrFilterDateTimePicker.dtpDateTime.Value.Month & "/" & ucrFilterDateTimePicker.dtpDateTime.Value.Day & Chr(34)
-                '    Else
-                '        strCondition = ucrValueForFilter.GetText()
-                '    End If
             End If
         End If
 
         clsCurrentConditionView.AddParameter(strParameterValue:=strCondition.Replace(Chr(34), Chr(39)))
-        'clsCurrentConditionList.AddParameter("value", strCondition)
         If ucrFilterOperation.Visible AndAlso (ucrFilterOperation.GetText = "== NA" OrElse ucrFilterOperation.GetText = "!= NA") Then
             clsCurrentConditionList.AddParameter("value", "NA")
         Else
