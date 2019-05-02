@@ -134,10 +134,10 @@ Public Class ucrFilter
     Private Sub DataTypes()
         If ucrFilterOperation.Visible Then
             Select Case ucrFilterOperation.GetText
-                Case "== NA"
+                Case "is.na"
                     ucrValueForFilter.Visible = False
                     ucrFilterDateTimePicker.Visible = False
-                Case "!= NA"
+                Case "!is.na"
                     ucrValueForFilter.Visible = False
                     ucrFilterDateTimePicker.Visible = False
                 Case Else
@@ -259,10 +259,6 @@ Public Class ucrFilter
     End Sub
 
     Private Sub ucrFilterOperation_NameChanged() Handles ucrFilterOperation.NameChanged
-        CheckAddEnabled()
-    End Sub
-
-    Private Sub ucrValueForFilter_NameChanged()
         CheckAddEnabled()
     End Sub
 
