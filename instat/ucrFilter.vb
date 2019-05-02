@@ -111,7 +111,7 @@ Public Class ucrFilter
                 ucrFactorLevels.Visible = False
                 cmdToggleSelectAll.Visible = False
                 ucrFilterOperation.Visible = True
-                ucrFilterOperation.SetItems({"==", "!="})
+                ucrFilterOperation.SetItems({"==", "!=", "is.na", "!is.na"})
             ElseIf ucrFilterByReceiver.strCurrDataType.Contains("Date") Then
                 lblSelectLevels.Visible = False
                 ucrFactorLevels.Visible = False
@@ -146,7 +146,7 @@ Public Class ucrFilter
                         ucrFilterDateTimePicker.Visible = True
                     ElseIf ucrFilterByReceiver.strCurrDataType.Contains("logical") Then
                         ucrValueForFilter.Visible = True
-                        ucrValueForFilter.SetItems({"TRUE", "FALSE", "NA"})
+                        ucrValueForFilter.SetItems({"TRUE", "FALSE"})
                         ucrFilterDateTimePicker.Visible = False
                     ElseIf ucrFilterByReceiver.strCurrDataType.Contains("factor") Then
                         ucrValueForFilter.Visible = False
